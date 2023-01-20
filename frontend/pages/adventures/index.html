@@ -76,6 +76,10 @@
                             Clear
                         </div>
                     </div>
+                    <!-- Adventure/Activity addition Button -->
+                    <div class ="filter-bar-tile d-flex align-items-center">
+                        <button class="add-activity-button" id="activity-button">Add New Adventure</button>
+                    </div>
                 </div>
                 <!-- Section to display all selected categories  -->
                 <div class="mt-2" id="category-section">
@@ -88,7 +92,18 @@
     </div>
     <!-- Footer -->
     <footer>
-        <div class="container">© QTrip 2020</div>
+        <div class="container">
+            <div class="text-center">© QTrip Dynamic 2023</div>
+            <div class="row row-cols-auto justify-content-center">
+              <div class="col">Developed by Rahul Kumar</div>
+              <div class="col">
+                <div class="row row-cols-auto justify-content-center">
+                  <div class="col"><a href="https://gitlab.crio.do/COHORT_ME_QTRIPDYNAMIC_ENROLL_1640174016363/er-rahulkr95-ME_QTRIPDYNAMIC" target="_blank"> <img src="https://cdn-icons-png.flaticon.com/512/5968/5968853.png" alt="Gitlab Profile" style="width: 20px; height: 20px;"> GitLab</a></div>
+                  <div class="col"><a href="https://www.linkedin.com/in/rahul-kumar-84ab6b246/" target="_blank"> <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="Linkedin Profile" style="width: 18px; height: 18px;"> LinkedIn</a></div>
+                </div>
+              </div>     
+            </div>
+          </div>
     </footer>
 
     <!-- Bootstrap script -->
@@ -106,7 +121,8 @@
             filterFunction,
             saveFiltersToLocalStorage,
             getFiltersFromLocalStorage,
-            generateFilterPillsAndUpdateDOM
+            generateFilterPillsAndUpdateDOM,
+            addNewAdventure
         } from "../../modules/adventures_page.js";
 
         // Declaring global variable adventure
@@ -120,22 +136,25 @@
                 ? getFiltersFromLocalStorage()
                 : { duration: "", category: [] };
 
-
+        
         //entry point (executed when DOM is loaded)
         (async function () {
 
             //Fetches the City from URL query param (here : window.location.search is an in-built browser property that returns the query param from URL, example: http://localhost:8081/?city=bengaluru => window.location.search would return "?city=bengaluru")
             let city = await getCityFromURL(window.location.search);
-
+            
             //Fetches the adventures for the particular city
             adventures = await fetchAdventures(city);
-
+            
             //Applies filters on the adventures list
             let filteredAdventures = filterFunction(adventures, filters);
-
+            
             //Updates the filtered adventures list to the DOM
-            addAdventureToDOM(filteredAdventures)
-
+            addAdventureToDOM(filteredAdventures);
+            
+            //  Add new adventures for the given city by clicking on button
+            addNewAdventure(city);
+            
             // Updates the DOM with filter pills if any
             generateFilterPillsAndUpdateDOM(filters);
         })();

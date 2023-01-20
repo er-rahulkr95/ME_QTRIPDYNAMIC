@@ -5,21 +5,76 @@ import config from "../conf/index.js";
 function getCityFromURL(search) {
   // TODO: MODULE_ADVENTURES
   // 1. Extract the city id from the URL's Query Param and return it
-
+  const urlSearchParameters = new URLSearchParams(search.slice(1));
+  return urlSearchParameters.get("city");
 }
 
 //Implementation of fetch call with a paramterized input based on city
 async function fetchAdventures(city) {
   // TODO: MODULE_ADVENTURES
   // 1. Fetch adventures using the Backend API and return the data
-
+  try{
+    let fetchAdventuresResponse = await fetch(`${config.backendEndpoint}/adventures?city=${city}`);
+    let adventuresData = await fetchAdventuresResponse.json();
+    return adventuresData;
+  } catch{
+    return null;
+  }
+  
+   
 }
 
 //Implementation of DOM manipulation to add adventures for the given city from list of adventures
 function addAdventureToDOM(adventures) {
   // TODO: MODULE_ADVENTURES
   // 1. Populate the Adventure Cards and insert those details into the DOM
+  let rowElement = document.getElementById("data");
+  rowElement.classList.add("row-cols-2", "row-cols-sm-2", "row-cols-lg-4");
+  for(let adventureItem of adventures){
+    rowElement.innerHTML += `
+                                <div class="col mb-4" style = "position:relative;">
+                                <a href="detail/?adventure=${adventureItem.id}" id="${adventureItem.id}">
+                                <div class = "category-banner">${adventureItem.category}</div>
+                                  <div class="activity-card">
+                                    <img src="${adventureItem.image}" class="card-img-top" alt="${adventureItem.name}" />
+                                    <div class = " p-3 text-center text-lg-start w-100">
+                                      <div class="d-lg-flex justify-content-between">
+                                        <h6 class="card-title">${adventureItem.name}</h6>
+                                        <p class="card-text">₹${adventureItem.costPerHead}</p>
+                                      </div>
+                                      <div class="d-lg-flex justify-content-between mt-2">
+                                        <h6 class="card-title">Duration</h6>
+                                        <p class="card-text">${adventureItem.duration} Hours</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </a>
+                              </div>
+                            `
+  }
 
+
+}
+
+/*Implementation of Add New Adventure Button to add new adventures for the given city by clicking
+ and sending Post request to fetch new adventure data from backend automatically */
+function addNewAdventure(city){
+  // TODO: MODULE_ADVENTURES - optional
+  let addNewActivityButton = document.getElementById("activity-button");
+  addNewActivityButton.addEventListener("click",()=>{
+    fetch(`${config.backendEndpoint}/adventures/new`, {
+      method: "POST",
+      body: JSON.stringify({ "city":`${city}`}),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+        }
+     })
+      .then((response) => response.json())
+      .then((json) => console.log(json))
+      .catch((err)=>{
+        console.log(err);
+        return err});
+  });
 }
 
 //Implementation of filtering by duration which takes in a list of adventures, the lower bound and upper bound of duration and returns a filtered list of adventures.
@@ -90,4 +145,5 @@ export {
   saveFiltersToLocalStorage,
   getFiltersFromLocalStorage,
   generateFilterPillsAndUpdateDOM,
+  addNewAdventure,
 };

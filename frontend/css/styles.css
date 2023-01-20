@@ -117,7 +117,7 @@ footer {
   color: #000;
   position: relative;
   height: 350px;
-  /* width: calc(25% - 20px); */
+  /* width: calc(25% - 20px); 
   /* padding: 6px; */
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -141,6 +141,24 @@ footer {
   -webkit-filter: brightness(50%);
   /* transform: scale(1.1); */
 }
+
+.add-activity-button{
+  padding: 0.5rem;
+  color: #fff;
+  background: rgb(255, 145, 0,0.6);
+  border: 1px solid orange;
+  border-radius: 20px;
+  font-size: medium;
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  
+}
+.add-activity-button:hover{
+  color: #fff;
+  background: rgb(255, 145, 0);
+  border: 1px solid orange; 
+}
+
 
 /* activity-detail page css */
 

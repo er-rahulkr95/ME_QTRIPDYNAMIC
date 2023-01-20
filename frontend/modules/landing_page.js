@@ -3,7 +3,7 @@ import config from "../conf/index.js";
 async function init() {
   //Fetches list of all cities along with their images and description
   let cities = await fetchCities();
-  console.log(cities);
+
   //Updates the DOM with the cities
   let rowElement = document.getElementById("data");
   rowElement.classList.add("row-cols-1","row-cols-sm-2", "row-cols-lg-4")
@@ -33,13 +33,13 @@ function addCityToDOM(id, city, description, image) {
   let rowElement = document.getElementById("data");
  rowElement.innerHTML += `
                             <div class="col mb-4" >
-                              <a href="pages/adventures/?city=${id}" id=${id}>
+                              <a href="pages/adventures/?city=${id}" id="${id}">
                                 <div class="tile">
                                   <div class="tile-text text-center">
                                     <h5>${city}</h5>
                                     <p>${description}</p>
                                   </div>
-                                <img src=${image} alt=${description}>
+                                <img src="${image}" alt="${description}">
                                 </div>
                               </a>
                             </div>
