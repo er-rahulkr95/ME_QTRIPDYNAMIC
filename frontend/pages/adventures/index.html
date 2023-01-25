@@ -202,13 +202,13 @@
           
             
             generateFilterPillsAndUpdateDOM(filters);
-            
+          
             let filteredAdventures = filterFunction(adventures, filters);
             addAdventureToDOM(filteredAdventures);
             // TODO: MODULE_FILTERS
             // 1. Invoke saveFiltersToLocalStorage here
             saveFiltersToLocalStorage(filters);
-            removeIndividualPillFilter(adventures, filters);
+            // removeIndividualPillFilter(adventures, filters);
         }
         
 
@@ -231,11 +231,19 @@
             return self.indexOf(value) === index;
         }
 
+        //executed when cross button is clicked to remove the particular category pills filter 
+        function removePills(event){
+            document.getElementById("data").textContent = "";
+            removeIndividualPillFilter(adventures,filters,event);
+            
+        }
+
         //registering module based functions in the DOM in order for them to work
         window.selectDuration = selectDuration;
         window.selectCategory = selectCategory;
         window.clearDuration = clearDuration;
         window.clearCategory = clearCategory;
+        window.removePills = removePills;
     </script>
 </body>
 

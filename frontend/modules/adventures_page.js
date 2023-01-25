@@ -117,17 +117,17 @@ function filterFunction(list, filters) {
   // 2. Depending on which filters are needed, invoke the filterByDuration() and/or filterByCategory() methods
   let categoryList = filters.category;
   let durationRange = filters.duration;
-  let durationArray = durationRange.split("-");
-  if(categoryList.length !== 0 && durationRange == ""){
+  let durationRangeArray = durationRange.split("-");
+  if(categoryList.length !== 0 && durationRange === ""){
     return filterByCategory(list, categoryList);
   }
   if(durationRange !== "" && categoryList.length === 0){
-    let [low,high] = durationArray;
+    let [low,high] = durationRangeArray;
     return filterByDuration(list, low, high);
   }
   
   if(categoryList.length !== 0 && durationRange !== ""){
-    let [low,high] = durationArray;
+    let [low,high] = durationRangeArray;
     let filterResult =[];
     let durationResult = filterByDuration(list, low, high);
     let categoryResult = filterByCategory(list, categoryList);
@@ -178,33 +178,29 @@ function generateFilterPillsAndUpdateDOM(filters) {
   // 1. Use the filters given as input, update the Duration Filter value and Generate Category Pills
   let durationValueElement = document.getElementById("duration-select");
   let optionsElement = durationValueElement.options;
-  for(let i = 0; i<optionsElement.length; i++){
-    if(optionsElement[i].value == filters.duration){
-      optionsElement.selectedIndex = i;
+  for(let index = 0; index < optionsElement.length; index++){
+    if(optionsElement[index].value == filters.duration){
+      optionsElement.selectedIndex = index;
     }
   }
   let pillsDisplay =  document.getElementById("category-list");
   for( let pillsCategory of filters.category){
     pillsDisplay.innerHTML +=  `
-                                  <div class = "selectedCategory" style="position:relative">
+                                  <div style="position:relative">
                                   <div class="category-filter">${pillsCategory}</div>
-                                  <img src="https://cdn-icons-png.flaticon.com/512/8816/8816685.png" id="${pillsCategory}"  class= "pillsClose" height = "25px" widht="25px" style="position:absolute; top:0; right:0">
+                                  <img src="https://cdn-icons-png.flaticon.com/512/8816/8816685.png" onclick="removePills(event)" id="${pillsCategory}"  height = "25px" widht="25px" style="position:absolute; top:0; right:0">
                                   </div>
                                   `
   }
 }
-function removeIndividualPillFilter(adventures, filters){
-  let closeCategoryList = document.getElementsByClassName("pillsClose");
-  for( let categories of closeCategoryList){
-    categories.addEventListener("click",(event)=>{
-      let closeTarget= filters.category.indexOf(event.target.id);
-       filters.category.splice(closeTarget,1);
+// Implementation of removing of individual category pills filter clicking on the cross button 
+function removeIndividualPillFilter(adventures, filters, event){
+      let closeTargetPillIndex= filters.category.indexOf(event.target.id);
+      filters.category.splice(closeTargetPillIndex,1);
       event.target.parentElement.remove();
       let filteredAdventures = filterFunction(adventures, filters);
       addAdventureToDOM(filteredAdventures); 
       saveFiltersToLocalStorage(filters);
-    } );
-  }
 }
 
 export {
@@ -217,5 +213,6 @@ export {
   saveFiltersToLocalStorage,
   getFiltersFromLocalStorage,
   generateFilterPillsAndUpdateDOM,
-  addNewAdventure,removeIndividualPillFilter
+  addNewAdventure,
+  removeIndividualPillFilter
 };
