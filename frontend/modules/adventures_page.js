@@ -93,15 +93,19 @@ function filterByCategory(list, categoryList) {
   // TODO: MODULE_FILTERS
   // 1. Filter adventures based on their Category and return filtered list
 
-  let filtereAdventureByCategory =[];
+  let filterAdventureByCategory =[];
   for (let selectedCategories of categoryList){
     for(let i=0; i<list.length; i++){
       if(list[i].category === selectedCategories){
-        filtereAdventureByCategory.push(list[i]);
+        filterAdventureByCategory.push(list[i]);
       }
     }
   }
-  return filtereAdventureByCategory;
+
+  //Another approach to filter adventure by category
+  // let filterAdventureByCategory = list.filter((adventures)=> categoryList.includes(adventures.category));
+  // console.log(filterAdventureByCategory);
+  return filterAdventureByCategory;
 }
 
 // filters object looks like this filters = { duration: "", category: [] };
@@ -128,17 +132,23 @@ function filterFunction(list, filters) {
   
   if(categoryList.length !== 0 && durationRange !== ""){
     let [low,high] = durationRangeArray;
-    let filterResult =[];
     let durationResult = filterByDuration(list, low, high);
-    let categoryResult = filterByCategory(list, categoryList);
-    for(let categoryAdventure of categoryResult){
-      for(let durationAdventure of durationResult){
-        if(categoryAdventure.category === durationAdventure.category && categoryAdventure.duration === durationAdventure.duration){
-          filterResult.push(durationAdventure);
-        }
-      }
-    }
-    return filterResult;
+    let categoryResult = filterByCategory(durationResult, categoryList);
+    return categoryResult;
+
+    //Another approach to filter the adventures when both duration and category is selected
+    // let [low,high] = durationRangeArray;
+    // let filterResult =[];
+    // let durationResult = filterByDuration(list, low, high);
+    //  let categoryResult = filterByCategory(list, categoryList);
+    // for(let categoryAdventure of categoryResult){
+    //   for(let durationAdventure of durationResult){
+    //     if(categoryAdventure.category === durationAdventure.category && categoryAdventure.duration === durationAdventure.duration){
+    //       filterResult.push(durationAdventure);
+    //     }
+    //   }
+    // }
+    // return filterResult;
   }
   
 
@@ -177,12 +187,18 @@ function generateFilterPillsAndUpdateDOM(filters) {
   // TODO: MODULE_FILTERS
   // 1. Use the filters given as input, update the Duration Filter value and Generate Category Pills
   let durationValueElement = document.getElementById("duration-select");
-  let optionsElement = durationValueElement.options;
-  for(let index = 0; index < optionsElement.length; index++){
-    if(optionsElement[index].value == filters.duration){
-      optionsElement.selectedIndex = index;
-    }
+  if(filters.duration!==""){
+    durationValueElement.value = filters.duration;
   }
+
+  //Another approach to update the duration filter value
+  // let optionsElement = durationValueElement.options;
+  // for(let index = 0; index < optionsElement.length; index++){
+  //   if(optionsElement[index].value == filters.duration){
+  //     optionsElement.selectedIndex = index;
+  //   }
+  // }
+
   let pillsDisplay =  document.getElementById("category-list");
   for( let pillsCategory of filters.category){
     pillsDisplay.innerHTML +=  `
