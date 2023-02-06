@@ -3,7 +3,6 @@ import config from "../conf/index.js";
 async function init() {
   //Fetches list of all cities along with their images and description
   let cities = await fetchCities();
-
   //Updates the DOM with the cities
   let rowElement = document.getElementById("data");
   rowElement.classList.add("row-cols-1","row-cols-sm-2", "row-cols-lg-4")
