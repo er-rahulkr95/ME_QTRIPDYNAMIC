@@ -4,25 +4,48 @@ import config from "../conf/index.js";
 function getAdventureIdFromURL(search) {
   // TODO: MODULE_ADVENTURE_DETAILS
   // 1. Get the Adventure Id from the URL
-
-
+  let urlSearchParameters = new URLSearchParams(search.slice(1))
+  return urlSearchParameters.get("adventure")
   // Place holder for functionality to work in the Stubs
-  return null;
+  // return null;
 }
 //Implementation of fetch call with a paramterized input based on adventure ID
 async function fetchAdventureDetails(adventureId) {
   // TODO: MODULE_ADVENTURE_DETAILS
   // 1. Fetch the details of the adventure by making an API call
-
+  try{
+    let fetchAdventureDetailsResponse = await fetch(`${config.backendEndpoint}/adventures/detail?adventure=${adventureId}`);
+    let adventureDetailsData = await fetchAdventureDetailsResponse.json();
+    return adventureDetailsData;
+  }catch(error){
+    return null;
+  }
 
   // Place holder for functionality to work in the Stubs
-  return null;
+  // return null;
 }
 
 //Implementation of DOM manipulation to add adventure details to DOM
 function addAdventureDetailsToDOM(adventure) {
   // TODO: MODULE_ADVENTURE_DETAILS
   // 1. Add the details of the adventure to the HTML DOM
+  let adventureHeadingElement = document.getElementById("adventure-name");
+  adventureHeadingElement.textContent = adventure.name;
+
+  let adventureSubtitleElement = document.getElementById("adventure-subtitle");
+  adventureSubtitleElement.textContent = adventure.subtitle;
+
+  let adventureGalleryElement = document.getElementById("photo-gallery");
+  adventure.images.forEach(src=>{
+    adventureGalleryElement.innerHTML += `<div>
+                                            <img src="${src}" class="activity-card-image" alt="${adventure.name}"/>
+                                          </div>
+                                        `
+  })
+
+  let adventureContentElement = document.getElementById("adventure-content");
+  adventureContentElement.textContent = adventure.content;
+
 
 }
 
@@ -30,6 +53,33 @@ function addAdventureDetailsToDOM(adventure) {
 function addBootstrapPhotoGallery(images) {
   // TODO: MODULE_ADVENTURE_DETAILS
   // 1. Add the bootstrap carousel to show the Adventure images
+  let adventureGalleryElement = document.getElementById("photo-gallery");
+  adventureGalleryElement.innerHTML = `
+                                          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-indicators">
+                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                            </div>
+                                            <div class="carousel-inner" id="carouselInner">
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                              <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                              <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                      `
+   let carouselInnerElement = document.getElementById("carouselInner")
+   images.forEach((imageSrc,index)=>{
+    carouselInnerElement.innerHTML += ` <div class="carousel-item ${index===0? "active":""}">
+                                          <img src="${imageSrc}" class="d-block activity-card-image w-100" alt="Image ${index+1}">
+                                        </div>
+                                      `
+   });
 
 }
 
