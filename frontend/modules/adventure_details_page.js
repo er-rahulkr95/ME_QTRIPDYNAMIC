@@ -55,26 +55,27 @@ function addBootstrapPhotoGallery(images) {
   // 1. Add the bootstrap carousel to show the Adventure images
   let adventureGalleryElement = document.getElementById("photo-gallery");
   adventureGalleryElement.innerHTML = `
-                                          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                                            <div class="carousel-indicators">
-                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                          <div id="adventureCarousel" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-indicators" id="carouselIndicatorButton">
                                             </div>
                                             <div class="carousel-inner" id="carouselInner">
                                             </div>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#adventureCarousel" data-bs-slide="prev">
                                               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                               <span class="visually-hidden">Previous</span>
                                             </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                            <button class="carousel-control-next" type="button" data-bs-target="#adventureCarousel" data-bs-slide="next">
                                               <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                               <span class="visually-hidden">Next</span>
                                             </button>
                                         </div>
                                       `
+   let carouselIndicaterElement = document.getElementById("carouselIndicatorButton")
    let carouselInnerElement = document.getElementById("carouselInner")
    images.forEach((imageSrc,index)=>{
+    carouselIndicaterElement.innerHTML += `
+                                          <button type="button" data-bs-target="#adventureCarousel" data-bs-slide-to="${index}" ${index===0? "class='active' aria-current='true'":""} aria-label="Slide ${index+1}"></button>
+                                          `
     carouselInnerElement.innerHTML += ` <div class="carousel-item ${index===0? "active":""}">
                                           <img src="${imageSrc}" class="d-block activity-card-image w-100" alt="Image ${index+1}">
                                         </div>
