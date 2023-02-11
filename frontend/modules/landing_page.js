@@ -2,7 +2,7 @@ import config from "../conf/index.js";
 
 async function init() {
   //Fetches list of all cities along with their images and description
-  let cities = await fetchCities();
+  const cities = await fetchCities();
   //Updates the DOM with the cities
   let rowElement = document.getElementById("data");
   rowElement.classList.add("row-cols-1","row-cols-sm-2", "row-cols-lg-4")
@@ -16,10 +16,11 @@ async function fetchCities() {
   // TODO: MODULE_CITIES
   // 1. Fetch cities using the Backend API and return the data
   try{
-    let fetchCitiesResponse = await fetch(`${config.backendEndpoint}/cities`);
-    let citiesData = await fetchCitiesResponse.json();
+    const fetchCitiesResponse = await fetch(`${config.backendEndpoint}/cities`);
+    const citiesData = await fetchCitiesResponse.json();
     return citiesData;
-  }catch(err){
+  }catch(error){
+    console.log(error);
     return null;
   }
 

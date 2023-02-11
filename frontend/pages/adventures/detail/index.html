@@ -51,13 +51,13 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="">
-                        <div id="reservation-panel-sold-out">
+                        <div id="reservation-panel-sold-out" style="display:none">
                             <h3>Sold Out!</h3>
                             <hr />
                             This activity is currently sold out. But there's a lot more to
                             <a href="../../../" style="color: orange !important">explore.</a>
                         </div>
-                        <div id="reservation-panel-available">
+                        <div id="reservation-panel-available" style="display:none">
                             <form id="myForm" action="" method="">
                                 <label>Name</label>
                                 <input type="text" class="form-control" name="name" required />
@@ -133,15 +133,14 @@
         (async function () {
             let adventureId = await getAdventureIdFromURL(window.location.search);
             let adventureDetails = await fetchAdventureDetails(adventureId);
-            console.log(adventureDetails);
             addAdventureDetailsToDOM(adventureDetails);
             addBootstrapPhotoGallery(adventureDetails.images);
             //To make carousel slide automatically after page load.
-            let myCarousel = document.querySelector('#adventureCarousel')
+            let adventureCarouselElement = document.querySelector('#adventureCarousel')
             // initialize Carousel
-            let carousel = new bootstrap.Carousel(myCarousel)
+            let adventureCarousel = new bootstrap.Carousel(adventureCarouselElement)
              // start animation
-            carousel.cycle();
+            adventureCarousel.cycle();
             conditionalRenderingOfReservationPanel(adventureDetails);
             captureFormSubmit(adventureDetails);
             showBannerIfAlreadyReserved(adventureDetails);

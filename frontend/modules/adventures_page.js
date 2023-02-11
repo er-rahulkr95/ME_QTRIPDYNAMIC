@@ -5,7 +5,7 @@ import config from "../conf/index.js";
 function getCityFromURL(search) {
   // TODO: MODULE_ADVENTURES
   // 1. Extract the city id from the URL's Query Param and return it
-  const urlSearchParameters = new URLSearchParams(search.slice(1));
+  const urlSearchParameters = new URLSearchParams(search);
   return urlSearchParameters.get("city");
 }
 
@@ -14,14 +14,14 @@ async function fetchAdventures(city) {
   // TODO: MODULE_ADVENTURES
   // 1. Fetch adventures using the Backend API and return the data
   try{
-    let fetchAdventuresResponse = await fetch(`${config.backendEndpoint}/adventures?city=${city}`);
-    let adventuresData = await fetchAdventuresResponse.json();
+    const fetchAdventuresResponse = await fetch(`${config.backendEndpoint}/adventures?city=${city}`);
+    const adventuresData = await fetchAdventuresResponse.json();
     return adventuresData;
-  } catch{
+  } catch(error){
+    console.log(error);
     return null;
   }
   
-   
 }
 
 //Implementation of DOM manipulation to add adventures for the given city from list of adventures
@@ -54,7 +54,6 @@ function addAdventureToDOM(adventures) {
                             `
   }
 
-
 }
 
 /*Implementation of Add New Adventure Button to add new adventures for the given city by clicking
@@ -62,19 +61,22 @@ function addAdventureToDOM(adventures) {
 function addNewAdventure(city){
   // TODO: MODULE_ADVENTURES - optional
   let addNewActivityButton = document.getElementById("activity-button");
-  addNewActivityButton.addEventListener("click",()=>{
-    fetch(`${config.backendEndpoint}/adventures/new`, {
-      method: "POST",
-      body: JSON.stringify({ "city":`${city}`}),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-        }
-     })
-      .then((response) => response.json())
-      .then((json) => console.log(json))
-      .catch((err)=>{
-        console.log(err);
-        return err});
+  addNewActivityButton.addEventListener("click", async (event)=>{
+    event.preventDefault();
+    try{
+      let postAdventure = await fetch(`${config.backendEndpoint}/adventures/new`, {
+            method: "POST",
+            body: JSON.stringify({ "city":`${city}`}),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8"
+              }
+           });
+      alert("New Adventure Successfully Added! Look out at the end of adeventure cards for newly added adventure.")
+      location.reload();
+    }catch(error){
+      alert(error);
+      console.log(error);
+    }
   });
 }
 
@@ -104,7 +106,8 @@ function filterByCategory(list, categoryList) {
 
   //Another approach to filter adventure by category
   // let filterAdventureByCategory = list.filter((adventures)=> categoryList.includes(adventures.category));
-  // console.log(filterAdventureByCategory);
+  //Another one more approach to filter adventure by category
+  // let filterAdventureByCategory = list.filter((adventures)=> categoryList.indexOf(adventures.category)>-1);
   return filterAdventureByCategory;
 }
 
@@ -119,19 +122,19 @@ function filterFunction(list, filters) {
   // TODO: MODULE_FILTERS
   // 1. Handle the 3 cases detailed in the comments above and return the filtered list of adventures
   // 2. Depending on which filters are needed, invoke the filterByDuration() and/or filterByCategory() methods
-  let categoryList = filters.category;
-  let durationRange = filters.duration;
-  let durationRangeArray = durationRange.split("-");
+  const categoryList = filters.category;
+  const durationRange = filters.duration;
+  const durationRangeArray = durationRange.split("-");
   if(categoryList.length !== 0 && durationRange === ""){
     return filterByCategory(list, categoryList);
   }
   if(durationRange !== "" && categoryList.length === 0){
-    let [low,high] = durationRangeArray;
+    const [low,high] = durationRangeArray;
     return filterByDuration(list, low, high);
   }
   
   if(categoryList.length !== 0 && durationRange !== ""){
-    let [low,high] = durationRangeArray;
+    const [low,high] = durationRangeArray;
     let durationResult = filterByDuration(list, low, high);
     let categoryResult = filterByCategory(durationResult, categoryList);
     return categoryResult;
@@ -151,8 +154,6 @@ function filterFunction(list, filters) {
     // return filterResult;
   }
   
-
-
   // Place holder for functionality to work in the Stubs
   return list;
 }
@@ -170,11 +171,8 @@ function getFiltersFromLocalStorage() {
   // TODO: MODULE_FILTERS
   // 1. Get the filters from localStorage and return String read as an object
   
-  
     return JSON.parse(localStorage.getItem("filters"));
  
-  
-
   // Place holder for functionality to work in the Stubs
   // return null;
 }
@@ -204,14 +202,14 @@ function generateFilterPillsAndUpdateDOM(filters) {
     pillsDisplay.innerHTML +=  `
                                   <div style="position:relative">
                                   <div class="category-filter">${pillsCategory}</div>
-                                  <img src="https://cdn-icons-png.flaticon.com/512/8816/8816685.png" onclick="removePills(event)" id="${pillsCategory}"  height = "25px" widht="25px" style="position:absolute; top:0; right:0">
+                                  <img src="https://cdn-icons-png.flaticon.com/512/8816/8816685.png" onclick="removePills(event)" data-pillcategory="${pillsCategory}" height = "25px" width="25px" style="position:absolute; top:0; right:0">
                                   </div>
                                   `
   }
 }
 // Implementation of removing of individual category pills filter clicking on the cross button 
 function removeIndividualPillFilter(adventures, filters, event){
-      let closeTargetPillIndex= filters.category.indexOf(event.target.id);
+      let closeTargetPillIndex= filters.category.indexOf(event.target.dataset.pillcategory);
       filters.category.splice(closeTargetPillIndex,1);
       event.target.parentElement.remove();
       let filteredAdventures = filterFunction(adventures, filters);

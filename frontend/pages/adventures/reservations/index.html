@@ -36,14 +36,14 @@
             <h1>Your Reservations</h1>
             <br />
 
-            <div class="alert alert-dark" role="alert" id="no-reservation-banner">
+            <div class="alert alert-dark" role="alert" id="no-reservation-banner" style="display:none">
                 Oops! You have not made any reservations yet! (Click
                 <a href="../../../"><strong>here</strong></a>
                 to explore some cities)
             </div>
-            <div class="row" id="reservation-table-parent">
+            <div class="row" id="reservation-table-parent" style="display:none;">
 
-                <table class="table">
+                <table class="table" id="reservationTable">
                     <thead>
                         <tr>
                             <th scope="col">Transaction ID</th>
@@ -57,7 +57,7 @@
                         </tr>
                     </thead>
                     <tbody id="reservation-table">
-
+                        
                     </tbody>
                 </table>
             </div>
@@ -65,7 +65,18 @@
     </div>
 
     <footer>
-        <div class="container">© QTrip 2020</div>
+        <div class="container">
+            <div class="text-center">© QTrip Dynamic 2023</div>
+            <div class="row row-cols-auto justify-content-center">
+              <div class="col">Developed by Rahul Kumar</div>
+              <div class="col">
+                <div class="row row-cols-auto justify-content-center">
+                  <div class="col"><a href="https://gitlab.crio.do/COHORT_ME_QTRIPDYNAMIC_ENROLL_1640174016363/er-rahulkr95-ME_QTRIPDYNAMIC" target="_blank"> <img src="https://cdn-icons-png.flaticon.com/512/5968/5968853.png" alt="Gitlab Profile" style="width: 20px; height: 20px;"> GitLab</a></div>
+                  <div class="col"><a href="https://www.linkedin.com/in/rahul-kumar-84ab6b246/" target="_blank"> <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="Linkedin Profile" style="width: 18px; height: 18px;"> LinkedIn</a></div>
+                </div>
+              </div>     
+            </div>
+          </div>
     </footer>
 
     <!-- Bootstrap script -->
@@ -79,9 +90,9 @@
         } from "../../../modules/reservation_page.js";
         (async function () {
             const reservations = await fetchReservations();
-            addReservationToTable(reservations);
+            addReservationToTable(reservations);    
         })();
-
+        
     </script>
 
 </body>

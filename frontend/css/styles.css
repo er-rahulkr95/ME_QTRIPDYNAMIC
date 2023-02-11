@@ -267,12 +267,13 @@ input[type="number"] {
   white-space: nowrap;
   border-radius: 20px;
   cursor: pointer;
+  border:none;
 }
 .reservation-visit-button:hover {
   background-color: rgb(226, 129, 1);
 }
 
-#carouselExampleIndicators {
+#carouselExampleIndicators, #adventureCarousel {
   width: 100%;
 }
 #reservation-panel-sold-out {
@@ -286,4 +287,14 @@ input[type="number"] {
   border-radius: 4px;
   padding: 16px;
   margin-bottom: 30px;
+}
+#reservation-table-parent{
+  overflow-x: auto;
+  overflow-y: auto;
+  height:60vh;
+}
+#reservation-table-parent thead th{
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
